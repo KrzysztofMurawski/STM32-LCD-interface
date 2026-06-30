@@ -67,3 +67,7 @@ void Error_Handler(void);
 #endif
 
 #endif /* __MAIN_H */
+
+void enable_rcc();
+
+void configure_onboard_led();

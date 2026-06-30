@@ -3,3 +3,8 @@ mx.scratch
 !.settings
 .vscode
 .vscode/
+build/*
+Debug/
+CMakeFiles/
+CMakeFiles
+.settings/

@@ -35,6 +35,11 @@
 #define LCD_DB7_PIN 3 
 
 // End of user config
+//
+// Instruction codes
+#define LCD_CLS             0x01u
+#define LCD_RET_HOME        0x02u
+
 
 #if LCD_RS_PIN > 7
 #define LCD_RS_CR CRH
@@ -106,11 +111,18 @@ void lcd_init();
 
 void lcd_reset_pins();
 void lcd_write_byte_to_db(char byte);
+
 void lcd_send_cmd(char byte);
 void lcd_send_char(char character);
+
 void lcd_command_mode();
 void lcd_data_mode();
 void lcd_flash_enable();
+
 void time_delay();
+
 void lcd_send_string(char *string);
 void lcd_send_int(int number);
+void lcd_send_float(float number, const unsigned int digits);
+
+void lcd_set_cursor_position(int x, int y);

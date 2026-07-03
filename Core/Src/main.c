@@ -9,9 +9,10 @@ int main()
 
     configure_onboard_led();
 
+
     lcd_init();
 
-    lcd_send_int(245);
+
 
 
     return 0;

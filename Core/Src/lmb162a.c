@@ -200,8 +200,19 @@ void lcd_send_int(int number){
         k /= 10;
         digits++;
     }
-    char *char_num_to_send = malloc(digits);
-    sprintf(char_num_to_send, "%d", number);
+    char char_num_to_send[digits];
+    snprintf(char_num_to_send, digits, "%d", number);
 
     lcd_send_string(char_num_to_send);
+}
+
+void lcd_send_float(float number, const unsigned int digits){
+    char char_num_to_send[digits+1];
+    snprintf(char_num_to_send, digits, "%f", number);
+
+    lcd_send_string(char_num_to_send);
+}
+
+void lcd_set_cursor_position(int x, int y){
+    lcd_send_cmd(0x80 + x + y * 0x40);
 }

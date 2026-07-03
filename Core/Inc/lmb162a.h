@@ -3,6 +3,12 @@
 #include "stm32f1xx.h"
 #include "stm32f103xb.h"
 #include <time.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+
+// Configure Ports and Pins for each LMB162a pin
+// WARNING: Use only FT (5V tolerant) pins (STM32f103x8 Datasheet, Table 5)
 
 #define LCD_RS_PORT     GPIOB
 #define LCD_RW_PORT     GPIOB
@@ -27,6 +33,8 @@
 #define LCD_DB5_PIN 12 
 #define LCD_DB6_PIN 15
 #define LCD_DB7_PIN 3 
+
+// End of user config
 
 #if LCD_RS_PIN > 7
 #define LCD_RS_CR CRH
@@ -103,3 +111,6 @@ void lcd_send_char(char character);
 void lcd_command_mode();
 void lcd_data_mode();
 void lcd_flash_enable();
+void time_delay();
+void lcd_send_string(char *string);
+void lcd_send_int(int number);

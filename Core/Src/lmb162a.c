@@ -1,8 +1,10 @@
 
 #include "lmb162a.h"
 
+
+
 void time_delay(){
-    for (int i = 0; i < 50000; i++){}
+    for (int i = 0; i < 5000; i++){}
 }
 
 void lcd_init(){
@@ -47,7 +49,29 @@ void lcd_init(){
     LCD_DB7_PORT->LCD_DB7_CR |= (0b0011u << ((LCD_DB7_PIN & 7) * 4));
     LCD_DB7_PORT->LCD_DB7_CR &= ~(0b1100u << ((LCD_DB7_PIN & 7) * 4));
 
-    lcd_reset_pins();
+    lcd_reset_pins();   
+
+    time_delay();
+
+    lcd_send_cmd(0x30);
+    time_delay();
+
+    lcd_send_cmd(0x30);
+    time_delay();
+
+    lcd_send_cmd(0x30);
+    time_delay();
+
+    lcd_send_cmd(0x38);
+
+    lcd_send_cmd(0x08);
+
+    lcd_send_cmd(0x01);
+    time_delay();
+
+    lcd_send_cmd(0x06);
+
+    lcd_send_cmd(0x0C);
 }
 
 void lcd_reset_pins()
@@ -138,29 +162,46 @@ void lcd_data_mode(){
 }
 
 void lcd_flash_enable(){
-
+    LCD_E_PORT->BSRR = (1 << LCD_E_PIN);
+    time_delay();
+    LCD_E_PORT->BSRR = (1 << (LCD_E_PIN + 16));
+    time_delay();
 }
 
 
-void lcd_write_byte(char byte){
-    LCD_E_PORT->BSRR = (LCD_E_PIN + 16);
-    lcd_write_byte_to_db(byte);
-    lcd_flash_enable();
 
-}
 
 void lcd_send_cmd(char byte){
     lcd_command_mode();
     lcd_write_byte_to_db(byte);
     time_delay();
-
-
+    lcd_flash_enable();
+    lcd_reset_pins();
 }
 
 void lcd_send_char(char character){
     lcd_data_mode();
     lcd_write_byte_to_db(character);
     time_delay();
+    lcd_flash_enable();
+    lcd_reset_pins();
+}
 
+void lcd_send_string(char *string){
+    while(*string){
+        lcd_send_char(*string++);
+    }
+}
 
+void lcd_send_int(int number){
+    int digits = 1;
+    int k = number;
+    while (k != 0){
+        k /= 10;
+        digits++;
+    }
+    char *char_num_to_send = malloc(digits);
+    sprintf(char_num_to_send, "%d", number);
+
+    lcd_send_string(char_num_to_send);
 }

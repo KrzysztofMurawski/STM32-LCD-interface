@@ -11,8 +11,8 @@ int main()
 
     lcd_init();
 
-    char character = 0xA2;
-    lcd_send_char(character);
+    lcd_send_int(245);
+
 
     return 0;
 }

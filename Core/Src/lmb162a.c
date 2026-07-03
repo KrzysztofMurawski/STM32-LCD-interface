@@ -1,9 +1,19 @@
 
-#include "lmb162a_config.h"
-#include "stm32f103xb.h"
+#include "lmb162a.h"
+
+void time_delay(){
+    for (int i = 0; i < 50000; i++){}
+}
 
 void lcd_init(){
+
+    //Disable JTAG
+    RCC->APB2ENR |= RCC_APB2ENR_AFIOEN;
+    AFIO->MAPR |= AFIO_MAPR_SWJ_CFG_JTAGDISABLE;
+
     // Set pins as output
+
+
     LCD_RS_PORT->LCD_RS_CR |= (0b0011u << ((LCD_RS_PIN & 7) * 4));
     LCD_RS_PORT->LCD_RS_CR &= ~(0b1100u << ((LCD_RS_PIN & 7) * 4));
 
@@ -113,4 +123,44 @@ void lcd_write_byte_to_db(char byte)
         LCD_DB7_PORT->BSRR = (1 << LCD_DB7_PIN);
     else
         LCD_DB7_PORT->BSRR = (1 << (LCD_DB7_PIN + 16));
+}
+
+
+void lcd_command_mode(){
+    LCD_RS_PORT->BSRR = (1 << (LCD_RS_PIN + 16));
+    LCD_RW_PORT->BSRR = (1 << (LCD_RW_PIN + 16));
+}
+
+void lcd_data_mode(){
+    LCD_RS_PORT->BSRR = (1 << (LCD_RS_PIN));
+    LCD_RW_PORT->BSRR = (1 << (LCD_RW_PIN + 16));
+
+}
+
+void lcd_flash_enable(){
+
+}
+
+
+void lcd_write_byte(char byte){
+    LCD_E_PORT->BSRR = (LCD_E_PIN + 16);
+    lcd_write_byte_to_db(byte);
+    lcd_flash_enable();
+
+}
+
+void lcd_send_cmd(char byte){
+    lcd_command_mode();
+    lcd_write_byte_to_db(byte);
+    time_delay();
+
+
+}
+
+void lcd_send_char(char character){
+    lcd_data_mode();
+    lcd_write_byte_to_db(character);
+    time_delay();
+
+
 }

@@ -1,6 +1,8 @@
 #pragma once
 
 #include "stm32f1xx.h"
+#include "stm32f103xb.h"
+#include <time.h>
 
 #define LCD_RS_PORT     GPIOB
 #define LCD_RW_PORT     GPIOB
@@ -96,3 +98,8 @@ void lcd_init();
 
 void lcd_reset_pins();
 void lcd_write_byte_to_db(char byte);
+void lcd_send_cmd(char byte);
+void lcd_send_char(char character);
+void lcd_command_mode();
+void lcd_data_mode();
+void lcd_flash_enable();

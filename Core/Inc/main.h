@@ -68,6 +68,6 @@ void Error_Handler(void);
 
 #endif /* __MAIN_H */
 
-void enable_rcc();
+void enable_rcc_for_gpio();
 
 void configure_onboard_led();
